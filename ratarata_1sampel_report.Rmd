@@ -1,35 +1,54 @@
 ---
 title: "Uji t 1 Sampel"
 output:
-  pdf_document: default
+  pdf_document: 
+    latex_engine: pdflatex
+    keep_tex: false
   word_document: default
 params:
   var: NA
-  mu: NA
+  mu0: NA
   test_output: NA
   interpretation_text: NA
-  plot_path: NA
 ---
 
-## Informasi Uji t 1 Sampel
+```{r setup, include=FALSE}
+# Set library path
+.libPaths(c("~/R/library", .libPaths()))
 
-**Variabel**: `r params$var`
+# Load required packages
+suppressMessages({
+  library(knitr)
+  library(rmarkdown)
+})
 
-**Nilai Hipotesis (μ₀)**: `r params$mu`
-
-## Hasil Uji
-
-```{r echo=FALSE}
-cat(params$test_output)
+# Set knitr options
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
-## Grafik (jika ada)
-```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
-if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+## Uji t 1 Sampel
+
+### Informasi Uji
+- **Variabel yang diuji:** `r params$var`
+- **Nilai hipotesis (μ₀):** `r params$mu0`
+
+### Hasil Uji
+
+```{r, comment=''}
+if (!is.null(params$test_output) && length(params$test_output) > 0) {
+  cat(paste(params$test_output, collapse="\n"))
+}
 ```
 
-## Interpretasi
+### Interpretasi
 
-```{r echo=FALSE, results='asis'}
-cat(params$interpretation_text)
+```{r, results='asis'}
+if (!is.null(params$interpretation_text) && params$interpretation_text != "") {
+  # Clean up HTML tags if present
+  interp_text <- gsub("<[^>]*>", "", params$interpretation_text)
+  interp_text <- gsub("&nbsp;", " ", interp_text)
+  interp_text <- gsub("&lt;", "<", interp_text)
+  interp_text <- gsub("&gt;", ">", interp_text)
+  cat(interp_text)
+}
 ```

@@ -1,7 +1,9 @@
 ---
 title: "Uji t 2 Sampel Berpasangan"
 output:
-  pdf_document: default
+  pdf_document: 
+    latex_engine: pdflatex
+    keep_tex: false
   word_document: default
 params:
   var1: NA
@@ -10,20 +12,43 @@ params:
   interpretation_text: NA
 ---
 
-## Informasi Uji t 2 Sampel Berpasangan
+```{r setup, include=FALSE}
+# Set library path
+.libPaths(c("~/R/library", .libPaths()))
 
-**Variabel 1**: `r params$var1`
+# Load required packages
+suppressMessages({
+  library(knitr)
+  library(rmarkdown)
+})
 
-**Variabel 2**: `r params$var2`
-
-## Hasil Uji
-
-```{r echo=FALSE}
-cat(params$test_output)
+# Set knitr options
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
-## Interpretasi
+## Uji t 2 Sampel Berpasangan
 
-```{r echo=FALSE, results='asis'}
-cat(params$interpretation_text)
+### Informasi Uji
+- **Variabel 1:** `r params$var1`
+- **Variabel 2:** `r params$var2`
+
+### Hasil Uji
+
+```{r, comment=''}
+if (!is.null(params$test_output) && length(params$test_output) > 0) {
+  cat(paste(params$test_output, collapse="\n"))
+}
+```
+
+### Interpretasi
+
+```{r, results='asis'}
+if (!is.null(params$interpretation_text) && params$interpretation_text != "") {
+  # Clean up HTML tags if present
+  interp_text <- gsub("<[^>]*>", "", params$interpretation_text)
+  interp_text <- gsub("&nbsp;", " ", interp_text)
+  interp_text <- gsub("&lt;", "<", interp_text)
+  interp_text <- gsub("&gt;", ">", interp_text)
+  cat(interp_text)
+}
 ```

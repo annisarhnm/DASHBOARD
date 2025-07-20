@@ -14,6 +14,13 @@ library(knitr)
 library(tseries)
 library(gridExtra)
 
+# Load necessary libraries dengan path custom
+.libPaths(c("~/R/library", .libPaths()))
+
+# Load additional required libraries
+library(rmarkdown)
+library(knitr)
+
 sovi_data <- read_csv("sovi_data.csv")
 distance <- read_csv("distance.csv")
 
@@ -115,19 +122,32 @@ shinyServer(function(input, output, session) {
     tempReport <- file.path(tempdir(), basename(input_file))
     file.copy(input_file, tempReport, overwrite = TRUE)
     tryCatch({
+      # Set library path in the rendering environment
+      env <- new.env(parent = globalenv())
+      env$.libPaths <- c("~/R/library", .libPaths())
+      
       rmarkdown::render(
         tempReport,
         output_file = output_file,
         params = params,
         output_format = output_format_type,
-        envir = new.env(parent = globalenv())
+        envir = env
       )
       TRUE
     }, error = function(e) {
-      showNotification(
-        paste0("Gagal membuat laporan PDF/Word. Pastikan Pandoc dan LaTeX (untuk PDF) sudah terinstall. Pesan error: ", e$message),
-        type = "error"
-      )
+      # More detailed error message
+      error_msg <- paste0("Gagal membuat laporan PDF/Word. Error: ", e$message)
+      
+      # Check for common issues
+      if (grepl("pandoc", e$message, ignore.case = TRUE)) {
+        error_msg <- paste0(error_msg, "\nPastikan Pandoc terinstall dengan benar.")
+      }
+      if (grepl("latex|pdflatex", e$message, ignore.case = TRUE)) {
+        error_msg <- paste0(error_msg, "\nPastikan LaTeX terinstall untuk generasi PDF.")
+      }
+      
+      showNotification(error_msg, type = "error", duration = 10)
+      cat("Render error:", e$message, "\n") # Log error to console
       FALSE
     })
   }

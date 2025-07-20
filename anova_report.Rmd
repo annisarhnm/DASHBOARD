@@ -1,44 +1,70 @@
 ---
 title: "Analisis Varians (ANOVA)"
 output:
-  pdf_document: default
+  pdf_document: 
+    latex_engine: pdflatex
+    keep_tex: false
   word_document: default
 params:
-  formula: NA
-  test_output: NA
-  interpretation_text: NA
-  plot_path: NA
-  anova_type: NA
+  type: NA
   y_var: NA
   group1_var: NA
   group2_var: NA
+  test_output: NA
+  interpretation_text: NA
+  plot_path: NA
 ---
 
-## Informasi ANOVA
+```{r setup, include=FALSE}
+# Set library path
+.libPaths(c("~/R/library", .libPaths()))
 
-**Jenis ANOVA**: `r params$anova_type`
+# Load required packages
+suppressMessages({
+  library(knitr)
+  library(rmarkdown)
+})
 
-**Variabel Dependen**: `r params$y_var`
-
-**Variabel Grup 1**: `r params$group1_var`
-
-**Variabel Grup 2**: `r if (!is.null(params$group2_var)) params$group2_var else '-'`
-
-**Formula**: `r params$formula`
-
-## Hasil Uji
-
-```{r echo=FALSE}
-cat(params$test_output)
+# Set knitr options
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
-## Grafik (jika ada)
-```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
-if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+## Analisis Varians (ANOVA)
+
+### Informasi Uji
+- **Jenis ANOVA:** `r params$type`
+- **Variabel dependen (Y):** `r params$y_var`
+- **Variabel grup 1 (X₁):** `r params$group1_var`
+
+```{r, results='asis'}
+if (!is.null(params$group2_var) && params$group2_var != "") {
+  cat("- **Variabel grup 2 (X₂):** ", params$group2_var, "\n")
+}
 ```
 
-## Interpretasi
+### Hasil Uji
 
-```{r echo=FALSE, results='asis'}
-cat(params$interpretation_text)
+```{r, comment=''}
+if (!is.null(params$test_output) && length(params$test_output) > 0) {
+  cat(paste(params$test_output, collapse="\n"))
+}
+```
+
+```{r, eval=!is.null(params$plot_path) && params$plot_path != "" && file.exists(params$plot_path)}
+if (!is.null(params$plot_path) && params$plot_path != "" && file.exists(params$plot_path)) {
+  knitr::include_graphics(params$plot_path)
+}
+```
+
+### Interpretasi
+
+```{r, results='asis'}
+if (!is.null(params$interpretation_text) && params$interpretation_text != "") {
+  # Clean up HTML tags if present
+  interp_text <- gsub("<[^>]*>", "", params$interpretation_text)
+  interp_text <- gsub("&nbsp;", " ", interp_text)
+  interp_text <- gsub("&lt;", "<", interp_text)
+  interp_text <- gsub("&gt;", ">", interp_text)
+  cat(interp_text)
+}
 ```

@@ -1,0 +1,45 @@
+---
+title: "Regresi Linear Berganda"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  formula: NA
+  summary_output: NA
+  assumption_text: NA
+  interpretation_text: NA
+  plot_path: NA
+  y_var: NA
+  x_vars: NA
+---
+
+## Informasi Model Regresi
+
+**Variabel Dependen (Y)**: `r params$y_var`
+
+**Variabel Independen (X)**: `r paste(params$x_vars, collapse = ", ")`
+
+**Formula Model**: `r params$formula`
+
+## Ringkasan Model
+
+```{r echo=FALSE}
+cat(params$summary_output)
+```
+
+## Grafik Diagnostik (jika ada)
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Uji Asumsi
+
+```{r echo=FALSE, results='asis'}
+cat(params$assumption_text)
+```
+
+## Interpretasi Model
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```

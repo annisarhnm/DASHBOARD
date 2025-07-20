@@ -1,0 +1,37 @@
+---
+title: "Ringkasan Kategorisasi Variabel"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  var_name: NA
+  num_cat: NA
+  new_col_name: NA
+  interpretation_text: NA
+  head_data: NA
+  plot_path: NA
+---
+
+## Variabel yang Dikategorikan
+
+**Nama Variabel**: `r params$var_name`
+
+**Jumlah Kategori**: `r params$num_cat`
+
+**Nama Kolom Baru**: `r params$new_col_name`
+
+## Interpretasi Kategori
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```
+
+## Grafik (jika ada)
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Cuplikan Data Kategorisasi
+```{r echo=FALSE}
+knitr::kable(head(params$head_data), caption = "Cuplikan Data Kategorisasi")
+```

@@ -1,0 +1,39 @@
+---
+title: "Eksplorasi Data"
+output: 
+  pdf_document: default
+  word_document: default
+params:
+  var_y: NA
+  var_x: NA
+  plot_type: NA
+  summary_text: NA
+  plot_path: NA
+  interpretation_text: NA
+  table: NA
+---
+
+## Variabel yang dieksplorasi
+- **Y**: `r params$var_y`
+- **X**: `r if (!is.null(params$var_x)) params$var_x else '-'`
+- **Jenis Grafik**: `r params$plot_type`
+
+## Grafik
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Ringkasan Statistik
+```{r echo=FALSE}
+cat(params$summary_text)
+```
+
+## Cuplikan Data
+```{r echo=FALSE}
+if (!is.null(params$table)) knitr::kable(head(params$table), caption = "Cuplikan Data")
+```
+
+## Interpretasi
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```

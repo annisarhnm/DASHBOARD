@@ -1,0 +1,40 @@
+---
+title: "Histori Sesi Analisis"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  log_data: NA
+  plots_list: NA
+  summary_info: NA
+---
+
+## Ringkasan Sesi
+
+```{r echo=FALSE, results='asis'}
+cat(params$summary_info)
+```
+
+## Aktivitas yang Dilakukan
+
+```{r echo=FALSE, results='asis'}
+if (!is.null(params$log_data) && length(params$log_data) > 0) {
+  cat(paste(params$log_data, collapse = "\n"))
+} else {
+  cat("Belum ada aktivitas analisis yang tercatat dalam sesi ini.")
+}
+```
+
+## Grafik yang Disimpan (jika ada)
+
+```{r echo=FALSE, eval=!is.null(params$plots_list) && length(params$plots_list) > 0}
+if (!is.null(params$plots_list) && length(params$plots_list) > 0) {
+  for (i in seq_along(params$plots_list)) {
+    if (!is.null(params$plots_list[[i]])) {
+      print(params$plots_list[[i]])
+    }
+  }
+} else {
+  cat("Tidak ada grafik yang disimpan dalam sesi ini.")
+}
+```

@@ -1,0 +1,38 @@
+---
+title: "Uji Homogenitas"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  dep_var: NA
+  group_var: NA
+  method: NA
+  test_output: NA
+  interpretation_text: NA
+  plot_path: NA
+---
+
+## Informasi Uji Homogenitas
+
+**Variabel Dependen**: `r params$dep_var`
+
+**Variabel Grup**: `r params$group_var`
+
+**Metode**: `r params$method`
+
+## Hasil Uji
+
+```{r echo=FALSE}
+cat(params$test_output)
+```
+
+## Grafik (jika ada)
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Interpretasi
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```

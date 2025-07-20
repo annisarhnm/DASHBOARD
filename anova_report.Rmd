@@ -1,0 +1,44 @@
+---
+title: "Analisis Varians (ANOVA)"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  formula: NA
+  test_output: NA
+  interpretation_text: NA
+  plot_path: NA
+  anova_type: NA
+  y_var: NA
+  group1_var: NA
+  group2_var: NA
+---
+
+## Informasi ANOVA
+
+**Jenis ANOVA**: `r params$anova_type`
+
+**Variabel Dependen**: `r params$y_var`
+
+**Variabel Grup 1**: `r params$group1_var`
+
+**Variabel Grup 2**: `r if (!is.null(params$group2_var)) params$group2_var else '-'`
+
+**Formula**: `r params$formula`
+
+## Hasil Uji
+
+```{r echo=FALSE}
+cat(params$test_output)
+```
+
+## Grafik (jika ada)
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Interpretasi
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```

@@ -1,0 +1,29 @@
+---
+title: "Uji t 2 Sampel Berpasangan"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  var1: NA
+  var2: NA
+  test_output: NA
+  interpretation_text: NA
+---
+
+## Informasi Uji t 2 Sampel Berpasangan
+
+**Variabel 1**: `r params$var1`
+
+**Variabel 2**: `r params$var2`
+
+## Hasil Uji
+
+```{r echo=FALSE}
+cat(params$test_output)
+```
+
+## Interpretasi
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```

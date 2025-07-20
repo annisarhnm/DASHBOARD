@@ -1,0 +1,36 @@
+---
+title: "Uji Proporsi dan Varians"
+output:
+  pdf_document: default
+  word_document: default
+params:
+  title: NA
+  test_output: NA
+  interpretation_text: NA
+  plot_path: NA
+  var_info: NA
+---
+
+## `r params$title`
+
+## Hasil Uji
+
+```{r echo=FALSE}
+cat(params$test_output)
+```
+
+## Grafik (jika ada)
+```{r, echo=FALSE, eval=!is.null(params$plot_path) && params$plot_path != ""}
+if (!is.null(params$plot_path) && file.exists(params$plot_path)) knitr::include_graphics(params$plot_path)
+```
+
+## Informasi Variabel (jika ada)
+```{r echo=FALSE, eval=!is.null(params$var_info)}
+if (!is.null(params$var_info)) cat(params$var_info)
+```
+
+## Interpretasi
+
+```{r echo=FALSE, results='asis'}
+cat(params$interpretation_text)
+```
